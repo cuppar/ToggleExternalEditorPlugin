@@ -4,11 +4,11 @@ extends Control
 const USE_EXTERNAL_EDITOR_SETTING_STRING: String = "text_editor/external/use_external_editor"
 
 var settings = EditorInterface.get_editor_settings()
-var is_enable_external_editor := settings.get(USE_EXTERNAL_EDITOR_SETTING_STRING)
 @onready var check_box: CheckBox = $HBoxContainer/CheckBox
 
 func _ready() -> void:
-	check_box.button_pressed = is_enable_external_editor
+	check_box.set_pressed_no_signal(settings.get(USE_EXTERNAL_EDITOR_SETTING_STRING))
+	settings.settings_changed.connect(_on_settings_changed)
 	
 
 func _on_link_button_pressed() -> void:
@@ -21,3 +21,7 @@ func _on_check_box_toggled(toggled_on: bool) -> void:
 	else:
 		print('Plugin<toggle_external_editor>: disable external editor')
 		settings.set(USE_EXTERNAL_EDITOR_SETTING_STRING, false)
+
+
+func _on_settings_changed() -> void:
+	check_box.set_pressed_no_signal(settings.get(USE_EXTERNAL_EDITOR_SETTING_STRING))
